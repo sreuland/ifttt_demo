@@ -1,4 +1,6 @@
-Welcome to Soroban for IFTTT, an example template demonstrating Soroban smart contracts as IFTTT triggers and actions.
+### Soroban for IFTTT
+
+An example template project of IFTTT API, demonstrating Soroban smart contracts integrated as IFTTT triggers and actions.
 
 If you're reading this document on platform.ifttt.com, go ahead and click the _Remix to Edit_ button in the upper right hand corner.
 
