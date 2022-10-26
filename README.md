@@ -1,12 +1,8 @@
 ### Soroban for IFTTT
 
-An example template project of IFTTT API, demonstrating Soroban smart contracts integrated as IFTTT triggers and actions.
+An example template project of IFTTT API, demonstrating Soroban smart contracts integrated as IFTTT triggers and actions. Fork/copy this repo create your own IFTTT API service implementation for your contracts.
 
-If you're reading this document on platform.ifttt.com, go ahead and click the _Remix to Edit_ button in the upper right hand corner.
-
-That will clone this project and create your own version on your Glitch profile.
-
-The example is comprised of these components:
+The example template is comprised of these components:
 
 1. IFTTT PaaS.
 2. IFTTT Service API implementation, a web service we host to front our custom smart contract application. 
@@ -20,20 +16,43 @@ The example is comprised of these components:
 
 For standing up this example, the following steps:
 
-* Remix this glitch to your own glitch account.
+* Fork/copy/clone this repo to your own workspace.
 
 * Create an IFTTT free account, create an IFTTT API service in your account and set the API address=glitch project url.
 
-* Launch [quickstart image for soroban development](https://github.com/stellar/quickstart#soroban-development) on your local.
-   This will provide the instance of soroban-rpc pre-connected to the network you chose(`--standalone` or `--futurenet`) and on port 8000 of your local.
+* Launch [quickstart image for soroban development](https://github.com/stellar/quickstart#soroban-development) on your local machine for `standalone` and `futurenet` networks:
+   The image will provide an instance of soroban-rpc pre-connected to the network you specify as param(`--standalone` or `--futurenet`) and exposed on a local port of your machine via the docker `-p "<your_local_port>:8000"`.
+   ```
+   # futurenet instance
+   docker run --platform linux/amd64 --rm -it -p "8001:8000" --name stellar_futurenet stellar/quickstart:soroban-dev --futurenet --enable-soroban-rpc 
+
+   # your own standalone instance
+   docker run --platform linux/amd64 --rm -it -p "8000:8000" --name stellar_standalone stellar/quickstart:soroban-dev --standalone --enable-soroban-rpc 
+   ```
 
 * Use [Laboratory Generate Keypair](https://laboratory.stellar.org/#account-creator?) to generate a new test account key pair to be used as 
-this application's service account. It will be used for signing tx's sent to network. Fund the new account by invoking the Friendbot url hosted on the Quickstart service:  
-`GET http://localhost:8000/friendbot?addr=<public key>`
+this application's service account. It will be used for signing tx's sent to network. Fund the new account by invoking the Friendbot url hosted on your Quickstart services:  
+```
+GET http://localhost:8000/friendbot?addr=<keypair_public key>
+GET http://localhost:8001/friendbot?addr=<keypair_public key>
+```
 
-* Use ngrok on your local to temporarily publish the rpc url from quickstart onto a internet routable address, assuming you used port 8000 for quickstart - `ngrok http 8000` 
+* start this IFTTT API web service on your local machine using at least node v12 and npm:
+```
+STANDALONE_RPC_URL=http://localhost:8000/soroban/rpc \ 
+STANDALONE_SOURCE_KEY=<keypair_secret_key> \
+STANDALONE_NETWORK_PASSPHRASE="Standalone Network ; February 2017" \
+FUTURENET_RPC_URL=http://localhost:8001/soroban/rpc \ 
+FUTURENET_SOURCE_KEY=<keypair_secret_key> \
+FUTURENET_NETWORK_PASSPHRASE="Test SDF Future Network ; October 2022" \
+IFTTT_SERVICE_KEY=<your_ifttt_api_service_key> \
+PORT=3000 \
+npm start
 
-* Edit the .env file, set network passphrase, secret key, and set the rpc url to your published ngrok address.
+```
+
+* Use ngrok on your local machine to temporarily publish this IFTTT API web service onto a temporary internet routable address, assuming you used port 3000 on startup - `ngrok http 3000`. Consider getting a free account on ngrok, that way this url won't expire after one hour. 
+
 
 * Compile the smart contract to wasm - [https://soroban.stellar.org/docs/tutorials/build](https://soroban.stellar.org/docs/tutorials/build):
   * Go into smart_contract/increment_by directory and `cargo build --target wasm32-unknown-unknown --release`  
@@ -41,13 +60,13 @@ this application's service account. It will be used for signing tx's sent to net
     `fn increment(by: u64) -> u64 `  
     It accepts an integer, and adds it to a persistent state counter and returns the new summed state value.
     
-* Deploy the contract to the network via the running local rpc server and your test account info - [https://soroban.stellar.org/docs/tutorials/deploy-to-local-network](https://soroban.stellar.org/docs/tutorials/deploy-to-local-network)
-   the cli will show the new contract id as a result, save that as will refer to it in later IFTTT trigger/action config.
+* Deploy the contract to the networks via the running local rpc servers and your test keypair account info - [https://soroban.stellar.org/docs/tutorials/deploy-to-local-network](https://soroban.stellar.org/docs/tutorials/deploy-to-local-network)
+   The cli will show the new contract id as a result, save that as will refer to it in later IFTTT trigger/action config.
    
 * In IFTTT->API->Triggers, create one trigger which represents a smart contract invocation. The smart contract events are emitted from `/ifttt/v1/triggers/contract_incremented_event` handler in server.js
   
-  * Define optional Trigger Fields if you want to enable network or contract id to be specified by end user during IFTTT applet creation. 
-    Otherwise, skip creating trigger fields, change `/ifttt/v1/triggers/contract_incremented_event` handler in server.js to hardcode values for network and contract id instead.
+  * Define optional Trigger Fields if you want to enable network choice(standalone and/or futurenet) and/or contract id to be specified by end user during IFTTT applet creation. 
+    Otherwise, skip creating trigger fields in IFTTT for these and change `/ifttt/v1/triggers/contract_incremented_event` handler in server.js to hardcode values for network and contract id instead.
   
   * Define at least one Ingredient based on this sample emitted contract event model from the server.js in the api:
 
@@ -66,14 +85,14 @@ this application's service account. It will be used for signing tx's sent to net
    
 * In IFTTT->API->Actions, create one action for invoking the contract's `increment` function. 
   This will refer to `/ifttt/v1/actions/invoke_contract_increment` handler in server.js
-  Define at least one Action field for `increment_amount` so, the end user can specify the value passed to the contract function.
-  Hardcode the contract_id and network in the server.js handler to keep this example simple. 
+  Define at least one Action field for `increment_amount` so, the IFTTT end user can specify the value passed to the contract function in their 'Then That' config of their applet.  
+  You can define optional Action fields for Network and ContractID also or hardcode them into the server.js handler to keep this example simple and less for IFTTT user to choose/config when they create their applet . 
   
   
 * in IFTTT->My Applets, create two new applets to demonstrate round trip:
   * Executing the contract:
     * `If This` - choose a trigger from the IFTTT service catalog which will initiate the contract getting invoked. 
-      Google Tasks Creation, SMS Received, etc.
+      Google Tasks Creation, SMS Received, are two easy ones, etc.
     * `Then That` - choose your new service action for invoking the contract. 
       Optionally specify the increment amount input on the action to be a variable substitution from an ingredient supplied by the trigger.
   * Execute something else based on contract event:
