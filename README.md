@@ -18,8 +18,6 @@ For standing up this example, the following steps:
 
 * Fork/copy/clone this repo to your own workspace.
 
-* Create an IFTTT free account, create an IFTTT API service in your account and set the API address=glitch project url.
-
 * Launch [quickstart image for soroban development](https://github.com/stellar/quickstart#soroban-development) on your local machine for `standalone` and `futurenet` networks:
    The image will provide an instance of soroban-rpc pre-connected to the network you specify as param(`--standalone` or `--futurenet`) and exposed on a local port of your machine via the docker `-p "<your_local_port>:8000"`.
    ```
@@ -62,6 +60,8 @@ npm start
     
 * Deploy the contract to the networks via the running local rpc servers and your test keypair account info - [https://soroban.stellar.org/docs/tutorials/deploy-to-local-network](https://soroban.stellar.org/docs/tutorials/deploy-to-local-network)
    The cli will show the new contract id as a result, save that as will refer to it in later IFTTT trigger/action config.
+
+* Create an IFTTT free account, in IFTTT->Developers->API, set the API URL to be the ngrok public https url it created. You can also find your IFTTT_SERVICE_KEY provided here on this screen.
    
 * In IFTTT->API->Triggers, create one trigger which represents a smart contract invocation. The smart contract events are emitted from `/ifttt/v1/triggers/contract_incremented_event` handler in server.js
   
