@@ -31,16 +31,20 @@ For standing up this example, the following steps:
 * Use [Laboratory Generate Keypair](https://laboratory.stellar.org/#account-creator?) to generate a new test account key pair to be used as 
 this application's service account. It will be used for signing tx's sent to network. Fund the new account by invoking the Friendbot url hosted on your Quickstart services:  
 ```
-GET http://localhost:8000/friendbot?addr=<keypair_public key>
-GET http://localhost:8001/friendbot?addr=<keypair_public key>
+curl http://localhost:8000/friendbot?addr=<keypair_public key>
+curl http://localhost:8001/friendbot?addr=<keypair_public key>
 ```
 
 * start this IFTTT API web service on your local machine using at least node v12 and npm:
 ```
-STANDALONE_RPC_URL=http://localhost:8000/soroban/rpc \ 
+# do this once from project directory, to install nodejs deps first
+npm install
+
+#
+STANDALONE_RPC_URL=http://localhost:8000/soroban/rpc \
 STANDALONE_SOURCE_KEY=<keypair_secret_key> \
 STANDALONE_NETWORK_PASSPHRASE="Standalone Network ; February 2017" \
-FUTURENET_RPC_URL=http://localhost:8001/soroban/rpc \ 
+FUTURENET_RPC_URL=http://localhost:8001/soroban/rpc \
 FUTURENET_SOURCE_KEY=<keypair_secret_key> \
 FUTURENET_NETWORK_PASSPHRASE="Test SDF Future Network ; October 2022" \
 IFTTT_SERVICE_KEY=<your_ifttt_api_service_key> \
@@ -59,7 +63,11 @@ npm start
     It accepts an integer, and adds it to a persistent state counter and returns the new summed state value.
     
 * Deploy the contract to the networks via the running local rpc servers and your test keypair account info - [https://soroban.stellar.org/docs/tutorials/deploy-to-local-network](https://soroban.stellar.org/docs/tutorials/deploy-to-local-network)
-   The cli will show the new contract id as a result, save that as will refer to it in later IFTTT trigger/action config.
+   The cli will show the new contract id as a result, save that as may refer to contract id's in later IFTTT trigger/action config.
+   ```
+   # example cli invocation to deploy contract to the standalone network in quickstart on port 8000 on your machine.
+   $ soroban deploy --wasm ./smart_contract/increment_by/target/wasm32-unknown-unknown/release/soroban_increment_contract_by.wasm --rpc-url http://localhost:8000/soroban/rpc --secret-key SAF4ULPS7VW3QDQIZQY25HY4W65AJ7JHGIPEBIGQOXYRO3ZWGIF5D6BO --network-passphrase "Standalone Network ; February 2017" --salt 1
+   ```
 
 * Create an IFTTT free account, in IFTTT->Developers->API, set the API URL to be the ngrok public https url it created. You can also find your IFTTT_SERVICE_KEY provided here on this screen.
    

@@ -196,6 +196,8 @@ app.post('/ifttt/v1/actions/invoke_contract_increment', async (req, res, next) =
     incrementAmount = Number(req.body.actionFields.increment_amount);
     userTimeZone = req.body.user.timezone; // this is supplied by IFTTT based on the User that created the applet
 
+    console.log("received action " + contractId + " " + network + " " + incrementAmount + " ");
+
     if (!incrementAmount) {
         incrementAmount = 1;
     }
