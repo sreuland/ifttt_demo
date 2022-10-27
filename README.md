@@ -66,7 +66,7 @@ npm start
    The cli will show the new contract id as a result, save that as may refer to contract id's in later IFTTT trigger/action config.
    ```
    # example cli invocation to deploy contract to the standalone network in quickstart on port 8000 on your machine.
-   $ soroban deploy --wasm ./smart_contract/increment_by/target/wasm32-unknown-unknown/release/soroban_increment_contract_by.wasm --rpc-url http://localhost:8000/soroban/rpc --secret-key SAF4ULPS7VW3QDQIZQY25HY4W65AJ7JHGIPEBIGQOXYRO3ZWGIF5D6BO --network-passphrase "Standalone Network ; February 2017" --salt 1
+   $ soroban deploy --wasm ./smart_contract/increment_by/target/wasm32-unknown-unknown/release/soroban_increment_contract_by.wasm --rpc-url http://localhost:8000/soroban/rpc --secret-key <keypair_secret_key> --network-passphrase "Standalone Network ; February 2017" --salt 1
    ```
 
 * Create an IFTTT free account, in IFTTT->Developers->API, set the API URL to be the ngrok public https url it created. You can also find your IFTTT_SERVICE_KEY provided here on this screen.
