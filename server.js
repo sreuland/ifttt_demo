@@ -82,7 +82,7 @@ app.post('/ifttt/v1/triggers/contract_incremented_event', async (req, res, next)
     });
     return;
   }
-  
+
   let data = [],
       numOfItems = req.body.limit;
   
@@ -93,6 +93,8 @@ app.post('/ifttt/v1/triggers/contract_incremented_event', async (req, res, next)
   try {
     let contractId = req.body.triggerFields.contract_id; // optionally hardcode instead of being request field
     let network = req.body.triggerFields.network; // optionally hardcode instead of being request field
+
+    console.log("Trigger requested  " + contractId + " " + network);
 
     networkConfig = NetworkConfig[network];
     if (!networkConfig) {
@@ -106,6 +108,8 @@ app.post('/ifttt/v1/triggers/contract_incremented_event', async (req, res, next)
     events = tempContractEvents.get(network + contractId) || [];    
 
   } catch (error) {
+    console.log('Trigger response err ');
+    console.log(error);
     res.status(400).send({
       "errors": [{
         "message": error.message
@@ -213,6 +217,8 @@ app.post('/ifttt/v1/actions/invoke_contract_increment', async (req, res, next) =
      account = new SorobanClient.Account(keyPair.publicKey(), stellarAccount.sequence);
      transaction = buildInvokeContractIncrementTx(contractId, account, keyPair, incrementAmount, networkConfig.network_passphrase);
   } catch (error) {
+    console.log("received action error");  
+    console.log(error);
     res.status(400).send({
       "errors": [{
         "message": error.message
@@ -245,7 +251,8 @@ app.post('/ifttt/v1/actions/invoke_contract_increment', async (req, res, next) =
         });
       })
       .catch(function(err) {
-        console.log('Transaction submit err ' + err);
+        console.log('Transaction submit err ');
+        console.log(err);
         res.status(500).send({
           "errors": [{
             "message": err
