@@ -1,6 +1,6 @@
 ### Soroban for IFTTT
 
-An example template project of IFTTT API, demonstrating [Stellar Soroban smart contract](https://soroban.stellar.org/docs) integrated as IFTTT triggers and actions. Fork/copy this repo create your own IFTTT API service implementation for your contracts.
+An example template project of IFTTT API, demonstrating [Stellar Soroban smart contract](https://soroban.stellar.org/docs) integrated as IFTTT triggers and actions. Fork/copy this repo as you wish to create your own IFTTT API service implementation for your contracts.
 
 The example template is comprised of these components:
 
