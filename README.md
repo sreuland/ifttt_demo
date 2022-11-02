@@ -32,7 +32,7 @@ For standing up this example, the following steps:
 this application's service account. It will be used for signing tx's sent to network. Fund the new account by invoking the Friendbot url hosted on your Quickstart services:  
 ```
 curl http://localhost:8000/friendbot?addr=<keypair_public key>
-curl http://localhost:8001/friendbot?addr=<keypair_public key>
+curl https://friendbot-futurenet.stellar.org/?addr=<keypair_public key>
 ```
 
 * start this IFTTT API web service on your local machine using at least node v12 and npm:
