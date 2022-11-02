@@ -7,10 +7,10 @@ The example template is comprised of these components:
 1. IFTTT PaaS.
 2. IFTTT Service API implementation, a web service we host to front our custom smart contract application. 
    It is implemented in this repo as server.js, and is basically some webhooks that IFTTT will call for triggers, actions.
-3. Soroban RPC Server, this is invoked by the IFTTT Service to resolve triggers, actions, queries.
-4. Soroban Core, this is a node on the blockchain network, Soroban RPC server connects to it.
-   The smart contract is stored and executed on the blockchain.
-5. A smart contract, this represents the application and what IFTTT triggers and actions can be wired up with.
+3. Soroban RPC Server, this is invoked by the IFTTT Service to translate triggers, actions into soroban contract function invocations or events.
+4. Soroban Core, this is a node on the stellar blockchain network, Soroban RPC server connects to it.
+   The smart contract is stored on the blockchain network and function invocations take place within a core node as the host.
+5. A smart contract, its functions represents the application domain and what IFTTT triggers and actions can be wired up with.
    The contract is a standalone program written in Rust, with functions representing what the application can do. 
    It can be compiled to wasm and deployed onto the blockchain, where it can then be invoked as an operation on a transaction.  
 
