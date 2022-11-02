@@ -69,7 +69,7 @@ npm start
    $ soroban deploy --wasm ./smart_contract/increment_by/target/wasm32-unknown-unknown/release/soroban_increment_contract_by.wasm --rpc-url http://localhost:8000/soroban/rpc --secret-key <keypair_secret_key> --network-passphrase "Standalone Network ; February 2017" --salt 1
    ```
 
-* Create an IFTTT free account, in IFTTT->Developers->API, set the API URL to be the ngrok public https url it created. You can also find your IFTTT_SERVICE_KEY provided here on this screen.
+* Create an IFTTT free account, in IFTTT->Developers->API, set the API URL to be the ngrok public https url that is created when you do `ngrok http 3000`. You can also find your IFTTT_SERVICE_KEY provided here on this screen.
    
 * In IFTTT->API->Triggers, create one trigger which represents a smart contract invocation. The smart contract events are emitted from `/ifttt/v1/triggers/contract_incremented_event` handler in server.js
   
