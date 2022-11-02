@@ -4,7 +4,7 @@ An example template project of IFTTT API, demonstrating [Stellar Soroban smart c
 
 The example template is comprised of these components:
 
-1. IFTTT PaaS.
+1. [IFTTT PaaS](https://ifttt.com).
 2. IFTTT Service API implementation, a web service we host to front our custom smart contract application. 
    It is implemented in this repo as server.js, and is basically some webhooks that IFTTT will call for triggers, actions.
 3. Soroban RPC Server, this is invoked by the IFTTT Service to translate triggers, actions into soroban contract function invocations or events.
